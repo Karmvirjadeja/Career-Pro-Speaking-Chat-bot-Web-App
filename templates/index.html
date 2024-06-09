@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CaareerPro</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts Link For Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+    />
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0p;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+      }
+
+      button {
+        padding: 7px 20px;
+        cursor: pointer;
+      }
+
+      .container {
+        display: flex;
+        /* justify-content: center;
+            align-items: center; */
+        height: 100vh;
+        flex-direction: row;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div
+        style="height: 100%; position: sticky"
+        class="absolute left-0 top-0 bottom-0 flex h-full w-full max-w-[20rem] flex-col bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5"
+      >
+        <div class="flex items-center gap-4 p-4 mb-2">
+          <img
+            src="https://docs.material-tailwind.com/img/logo-ct-dark.png"
+            alt="brand"
+            class="w-8 h-8"
+          />
+          <h5
+            class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900"
+          >
+            Career Pro
+          </h5>
+        </div>
+        <nav
+          class="flex min-w-[240px] flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700"
+        >
+          <div class="relative block w-full">
+            <div
+              role="button"
+              onclick="window.location.href='/demo';"
+              class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+            >
+              <button
+                type="button"
+                class="flex items-center justify-between w-full p-3 font-sans text-xl antialiased font-semibold leading-snug text-left transition-colors border-b-0 select-none border-b-blue-gray-100 text-blue-gray-700 hover:text-blue-gray-900"
+              >
+                <div class="grid mr-4 place-items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2.25 2.25a.75.75 0 000 1.5H3v10.5a3 3 0 003 3h1.21l-1.172 3.513a.75.75 0 001.424.474l.329-.987h8.418l.33.987a.75.75 0 001.422-.474l-1.17-3.513H18a3 3 0 003-3V3.75h.75a.75.75 0 000-1.5H2.25zm6.04 16.5l.5-1.5h6.42l.5 1.5H8.29zm7.46-12a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0v-6zm-3 2.25a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0V9zm-3 2.25a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </div>
+                <p
+                  class="block mr-auto font-sans text-base antialiased font-normal leading-relaxed text-blue-gray-900"
+                >
+                  Dashboard
+                </p>
+              </button>
+            </div>
+          </div>
+          <div
+            role="button"
+            onclick="window.location.href='http://localhost:5001/';"
+            class="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+          >
+            <div class="grid mr-4 place-items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                class="w-5 h-5"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            Login
+          </div>
+          <div
+            role="button"
+            onclick="window.location.href='http://localhost:3000/';"
+            class="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+          >
+            <div class="grid mr-4 place-items-center">
+              <img
+                src="/static/test.png"
+                width="32px"
+                height="32px"
+                alt="Android Jobs Graph"
+                class="w-5 h-5"
+              />
+            </div>
+            Assessment Test
+          </div>
+        </nav>
+      </div>
+      <img
+        src="/static/Android.jpg"
+        width="80%"
+        height="70%"
+        alt="Android Jobs Graph"
+        class="self-center"
+        style="margin-left: 2cm"
+      />
+      <img
+        src="/static/Backend1.jpg"
+        width="80%"
+        height="70%"
+        alt="Android Jobs Graph"
+        class="self-center"
+        style="margin-left: 2cm"
+      />
+      <img
+        src="/static/Backend2.jpg"
+        width="80%"
+        height="70%"
+        alt="Android Jobs Graph"
+        class="self-center"
+        style="margin-left: 2cm"
+      />
+      <img
+        src="/static/data1.jpg"
+        width="80%"
+        height="70%"
+        alt="Android Jobs Graph"
+        class="self-center"
+        style="margin-left: 2cm"
+      />
+      <button class="chatbot-toggler">
+        <span class="material-symbols-rounded">mode_comment</span>
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <iframe
+        class="pdf"
+        data="./../static/Android.pdf"
+        width="800"
+        height="500"
+      >
+      </iframe>
+      <div class="chatbot">
+        <header>
+          <h2>Audio Chatbot</h2>
+          <span class="close-btn material-symbols-outlined">close</span>
+        </header>
+        <ul class="chatbox"></ul>
+        <div id="conversation"></div>
+        <div class="audio-controls">
+          <!-- <div id="listeningStatus" style="display: none">Listening...</div> -->
+          <!-- <button id="recordButton" onclick="startListening()">Start Chatting</button> -->
+          <!-- HTML !-->
+          <button
+            class="button-36"
+            role="button"
+            id="recordButton"
+            onclick="startListening(true)"
+          >
+            Start Chatting
+          </button>
+        </div>
+        <!-- <audio id="audioPlayback" controls></audio> -->
+      </div>
+    </div>
+    <!-- <script src="script.js" defer></script> -->
+    <script>
+      const chatbotToggler = document.querySelector(".chatbot-toggler");
+      const closeBtn = document.querySelector(".close-btn");
+      const chatbox = document.querySelector(".chatbox");
+
+      closeBtn.addEventListener("click", () =>
+        document.body.classList.remove("show-chatbot")
+      );
+      chatbotToggler.addEventListener("click", () =>
+        document.body.classList.toggle("show-chatbot")
+      );
+
+      const createChatLi = (message, className) => {
+        // Create a chat <li> element with passed message and className
+        const chatLi = document.createElement("li");
+        chatLi.classList.add("chat", `${className}`);
+        let chatContent =
+          className === "outgoing"
+            ? `<p></p>`
+            : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
+        chatLi.innerHTML = chatContent;
+        chatLi.querySelector("p").textContent = message;
+        chatLi.querySelector("p").style.textAlign = "justify";
+        return chatLi; // return chat <li> element
+      };
+
+      const socket = io.connect("http://127.0.0.1:5000");
+
+      // const listeningStatusDiv = document.getElementById("listeningStatus");
+
+      socket.on("connect", function () {
+        console.log("Connected to server");
+      });
+
+      const generateResponse = (chatElement, message) => {
+        // const botResponse = data.bot_response;
+        console.log("Bot Response : ", message);
+        const messageElement = chatElement.querySelector("p");
+
+        // Clear any previous content
+        messageElement.textContent = "";
+
+        // Define the typing speed (adjust as needed)
+        const typingSpeed = 45; // in milliseconds
+
+        let index = 0;
+
+        const typeCharacter = () => {
+          if (index < message.length) {
+            messageElement.textContent += message.charAt(index);
+            index++;
+            setTimeout(typeCharacter, typingSpeed);
+          } else {
+            chatbox.scrollTo(0, chatbox.scrollHeight);
+          }
+        };
+
+        typeCharacter();
+      };
+
+      var terminate = false;
+      var recognition;
+
+      function initializeRecognition() {
+        recognition = new (window.SpeechRecognition ||
+          window.webkitSpeechRecognition)();
+        recognition.lang = "en-IN";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = function (event) {
+          const userInput = event.results[0][0].transcript;
+          chatbox.appendChild(createChatLi(userInput, "outgoing"));
+          chatbox.scrollTo(0, chatbox.scrollHeight);
+          socket.emit("user_input", { message: userInput });
+        };
+
+        recognition.onerror = function (event) {
+          console.error("Error occurred in recognition: " + event.error);
+        };
+
+        recognition.onend = function () {
+          if (!terminate) {
+            setTimeout(startListening, 1500); // Automatically restart recognition
+          }
+        };
+      }
+
+      function startListening() {
+        if (!terminate) {
+          document.getElementById("recordButton").innerText = "Listening...";
+          recognition.start();
+        }
+      }
+
+      socket.on("response", function (data) {
+        const message = data["message"];
+        if (
+          message ===
+          "Goodbye, Sir! Please come again for any Career related help"
+        ) {
+          document.getElementById("recordButton").innerText = "Start Chatting";
+          terminate = true;
+          recognition.stop();
+        }
+        console.log("Response : ", message);
+        const incomingChatLi = createChatLi(message, "incoming");
+        chatbox.appendChild(incomingChatLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+        generateResponse(incomingChatLi, message);
+      });
+
+      document
+        .getElementById("recordButton")
+        .addEventListener("click", function () {
+          if (terminate) {
+            terminate = false;
+            initializeRecognition();
+            startListening();
+            document.getElementById("recordButton").innerText = "Listening...";
+          }
+        });
+
+      // Initialize recognition on page load
+      initializeRecognition();
+    </script>
+  </body>
+</html>

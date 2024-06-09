@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Assistant</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h1>Virtual Assistant</h1>
+    <div id="conversation"></div>
+    <div id="listeningStatus" style="display: none">Listening...</div>
+    <button onclick="startListening()">Start Voice Assistant</button>
+
+    <script>
+      const socket = io.connect(
+        "http://" + document.domain + ":" + location.port
+      );
+      const listeningStatusDiv = document.getElementById("listeningStatus");
+
+      socket.on("connect", function () {
+        console.log("Connected to server");
+      });
+
+      socket.on("response", function (data) {
+        const message = data.message;
+        document.getElementById("conversation").innerHTML +=
+          "<p><b>Assistant:</b> " + message + "</p>";
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(message);
+        synth.speak(utterance);
+      });
+
+      function startListening() {
+        const recognition = new (window.SpeechRecognition ||
+          window.webkitSpeechRecognition)();
+        recognition.lang = "en-IN";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.start();
+        listeningStatusDiv.style.display = "block"; // Show listening status
+
+        recognition.onresult = function (event) {
+          const userInput = event.results[0][0].transcript;
+          document.getElementById("conversation").innerHTML +=
+            "<p><b>You:</b> " + userInput + "</p>";
+          socket.emit("user_input", { message: userInput });
+          listeningStatusDiv.style.display = "none"; // Hide listening status after processing
+        };
+
+        recognition.onerror = function (event) {
+          console.error("Error occurred in recognition: " + event.error);
+          listeningStatusDiv.style.display = "none"; // Hide listening status on error
+        };
+
+        recognition.onend = function () {
+          // Automatically restart recognition
+          startListening();
+        };
+      }
+    </script>
+  </body>
+</html>
